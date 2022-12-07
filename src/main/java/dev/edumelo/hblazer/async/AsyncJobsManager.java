@@ -31,15 +31,16 @@ public class AsyncJobsManager {
 	}
 	
 	public void putNotifierJob(String jobIdentifier, String jobId, Long jobExpiration,
-			CompletableFuture<? extends BaseResponse> job, long tokenValidityInMilliseconds,
-			Object... inputParameters) {
+			int failCount, CompletableFuture<? extends BaseResponse> job,
+			long tokenValidityInMilliseconds, Object... inputParameters) {
 		job.whenComplete((response, exception) -> {
 			 if (exception == null) {
 				 mqttService.publish(response, jobExpiration, tokenValidityInMilliseconds,
 						 jobIdentifier);
              } else {
             	 mqttService.publishException(inputParameters, exception.getMessage(),
-            			 jobExpiration, tokenValidityInMilliseconds, jobIdentifier);
+            			 jobExpiration, tokenValidityInMilliseconds, jobId, failCount,
+            			 jobIdentifier);
              }
 		});
 		mapOfJobs.put(jobId, job, ExpirationPolicy.CREATED, defaultJobExpiration,

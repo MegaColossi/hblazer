@@ -42,8 +42,9 @@ public class MqttService {
 	}
 	
 	public String publishException(Object[] content, String exceptionMessage, Long expiration,
-			long tokenValidityInMilliseconds, String... topicParts) {
-		MqttExceptionContent exceptionContent = new MqttExceptionContent(exceptionMessage, content);
+			long tokenValidityInMilliseconds, String jobId, int failCount, String... topicParts) {
+		MqttExceptionContent exceptionContent = new MqttExceptionContent(jobId, failCount,
+				exceptionMessage, content);
 		try {
 			String[] exceptionTopic = ArrayUtils.concatWithCollection(new String[]{"exception"},
 					topicParts);
