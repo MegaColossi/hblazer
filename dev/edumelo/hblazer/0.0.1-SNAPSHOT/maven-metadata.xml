@@ -3,21 +3,21 @@
   <groupId>dev.edumelo</groupId>
   <artifactId>hblazer</artifactId>
   <versioning>
-    <lastUpdated>20221208001754</lastUpdated>
+    <lastUpdated>20221208032241</lastUpdated>
     <snapshot>
-      <timestamp>20221208.001754</timestamp>
+      <timestamp>20221208.032241</timestamp>
       <buildNumber>1</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>0.0.1-20221208.001754-1</value>
-        <updated>20221208001754</updated>
+        <value>0.0.1-20221208.032241-1</value>
+        <updated>20221208032241</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>0.0.1-20221208.001754-1</value>
-        <updated>20221208001754</updated>
+        <value>0.0.1-20221208.032241-1</value>
+        <updated>20221208032241</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
