@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -41,8 +42,9 @@ public class MqttService {
 		}
 	}
 	
-	public String publishException(Object[] content, String exceptionMessage, Long expiration,
-			long tokenValidityInMilliseconds, String jobId, int failCount, String... topicParts) {
+	public String publishException(Map<String, Object> content, String exceptionMessage,
+			Long expiration, long tokenValidityInMilliseconds, String jobId, int failCount,
+			String... topicParts) {
 		MqttExceptionContent exceptionContent = new MqttExceptionContent(jobId, failCount,
 				exceptionMessage, content);
 		try {

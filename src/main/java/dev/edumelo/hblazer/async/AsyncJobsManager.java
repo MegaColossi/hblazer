@@ -1,5 +1,6 @@
 package dev.edumelo.hblazer.async;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -20,28 +21,31 @@ public class AsyncJobsManager {
 	private final MqttService mqttService;
 	private Long defaultJobExpiration;
 	private Long posCompletionJobExpiration;
+	private long tokenValidityInMilliseconds;
 	private final ExpiringMap<String, CompletableFuture<? extends BaseResponse>> mapOfJobs =
 			ExpiringMap.builder().variableExpiration().build();
 	
 	public AsyncJobsManager(Long defaultJobExpiration, Long posCompletionJobExpiration,
-			RestTemplate restTemplate, String mqttServerAddress, String mqttJwtToken) {
+			RestTemplate restTemplate, String mqttServerAddress, String mqttJwtToken,
+			long tokenValidityInMilliseconds) {
 		this.defaultJobExpiration = defaultJobExpiration;
 		this.posCompletionJobExpiration = posCompletionJobExpiration;
 		this.mqttService = new MqttService(restTemplate, mqttServerAddress, mqttJwtToken);
+		this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
 	}
 	
 	public void putNotifierJob(String jobIdentifier, String jobId, Long jobExpiration,
 			int failCount, CompletableFuture<? extends BaseResponse> job,
-			long tokenValidityInMilliseconds, Object... inputParameters) {
+			Map<String, Object> inputParameters) {
 		job.whenComplete((response, exception) -> {
 			 if (exception == null) {
 				 mqttService.publish(response, jobExpiration, tokenValidityInMilliseconds,
 						 jobIdentifier);
-             } else {
-            	 mqttService.publishException(inputParameters, exception.getMessage(),
-            			 jobExpiration, tokenValidityInMilliseconds, jobId, failCount,
-            			 jobIdentifier);
-             }
+            } else {
+           	 mqttService.publishException(inputParameters, exception.getMessage(),
+           			 jobExpiration, tokenValidityInMilliseconds, jobId, failCount,
+           			 jobIdentifier);
+            }
 		});
 		mapOfJobs.put(jobId, job, ExpirationPolicy.CREATED, defaultJobExpiration,
 				TimeUnit.SECONDS);

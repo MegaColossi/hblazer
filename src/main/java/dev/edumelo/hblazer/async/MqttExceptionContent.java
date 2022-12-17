@@ -1,13 +1,15 @@
 package dev.edumelo.hblazer.async;
 
+import java.util.Map;
+
 public class MqttExceptionContent {
 	String jobId;
 	int failCount;
 	String exceptionMessage;
-	Object[] content;
+	Map<String, Object> content;
 	
 	public MqttExceptionContent(String jobId, int failCount, String exceptionMessage,
-			Object[] content) {
+			Map<String, Object> content) {
 		this.jobId = jobId;
 		this.failCount = failCount;
 		this.exceptionMessage = exceptionMessage;
@@ -26,7 +28,7 @@ public class MqttExceptionContent {
 		return exceptionMessage;
 	}
 
-	public Object[] getContent() {
+	public Map<String, Object> getContent() {
 		return content;
 	}
 	
